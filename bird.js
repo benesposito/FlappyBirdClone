@@ -22,7 +22,7 @@ class Bird {
 			this.brain = brain.copy();
 			this.brain.mutate(mutate);
 		} else
-			this.brain = new NeuralNetwork(6, 12, 2);
+			this.brain = new NeuralNetwork(6, 2, 2);
 	}
 
 	update() {
@@ -41,8 +41,9 @@ class Bird {
 		}
 	}
 
-	draw() {
-		fill(255, 255, 0);
+	draw(opacity) {
+		stroke(0, opacity == undefined? 255 : opacity);
+		fill(255, 255, 0, opacity == undefined? 255 : opacity);
 		ellipse(this.x, this.y, this.size)
 	}
 

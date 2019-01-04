@@ -1,9 +1,9 @@
 const PIPE_PADDING = 10;
 const PIPE_WIDTH = 70;
-let   PIPE_GAP = 250;//200;
+let   PIPE_GAP = 220;//200;
 const Y_MARGIN = PIPE_PADDING + PIPE_GAP / 2;
 const PIPE_SPEED = 8;
-const PIPE_SPREAD = 400;
+const PIPE_SPREAD = 384;//352;
 
 const BIRD_STARTING_X = 100;
 let   BIRD_STARTING_Y;
@@ -16,6 +16,7 @@ let genFrameCount = 0;
 let gameSpeed = 1;
 let genCount = 1;
 let ai = true;
+let numBirds = 9999;
 
 let pipes = [];
 let livingBirds = [];
@@ -25,7 +26,7 @@ let score = 0;
 let highScore = 0;
 
 function setup() {
-	createCanvas(850, 720);
+	createCanvas(850, 570);
 	BIRD_STARTING_Y = height / 2;
 	background(144, 206, 255);
 	frameRate(60);
@@ -103,8 +104,13 @@ function draw() {
 		// Graphics
 		background(144, 206, 255);
 
-		for(let bird of livingBirds)
-			bird.draw();
+		//for(let bird of livingBirds)
+			//bird.draw();
+		for(i = 0; i < livingBirds.length && i < numBirds; i++)
+			livingBirds[i].draw();
+
+		//for(i = numBirds; i < livingBirds.length; i++)
+		//	livingBirds[i].draw(50);
 
 		for(let pipe of pipes)
 			pipe.draw();
@@ -112,11 +118,13 @@ function draw() {
 		fill(0);
 		textSize(45);
 		textAlign(LEFT)
-		text(score + ' (' + livingBirds.length + ')', 10, height - 50);
-		text(highScore, 10, height - 8);
+		text('Score: ' + score, 10, height - 92);
+		text('# of living birds: ' + livingBirds.length, 10, height - 50);
+		text('High Score: ' + highScore, 10, height - 8);
 		//text(Math.round(frameRate()), 70, height - 8);
 		textAlign(RIGHT)
-		text(genCount, width - 5, height - 8);
+		text('Game Speed: ' + gameSpeed, width - 5, height - 50);
+		text('Generation: ' + genCount, width - 5, height - 8);
 	}
 }
 

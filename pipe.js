@@ -13,6 +13,7 @@ class Pipe {
 	}
 
 	draw() {
+		stroke(0, 255);
 		fill(0, 255, 0);
 		rect(this.x, 0, PIPE_WIDTH, this.yTop);
 		rect(this.x, this.yBot, PIPE_WIDTH, height - this.yBot)
