@@ -1,11 +1,12 @@
 function getNextGeneration(prevGeneration) {
 	let nextGeneration = [];
+
 	normalizeFitness(prevGeneration);
 
 	for(i = 0; i < prevGeneration.length; i++)
 		nextGeneration.push(selectBird(prevGeneration));
 
-	return nextGeneration;
+	return nextGeneration.slice();
 }
 
 function selectBird(birds) {
@@ -23,8 +24,10 @@ function selectBird(birds) {
 function normalizeFitness(birds) {
 	let sum = 0;
 
-	for(let bird of birds)
+	for(let bird of birds) {
+		bird.fitness *= bird.fitness;
 		sum += bird.fitness;
+	}
 
 	for(let bird of birds)
 		bird.fitness /= sum;
