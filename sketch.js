@@ -15,6 +15,7 @@ const POPULATION = 300;
 let genFrameCount = 0;
 let gameSpeed = 1;
 let genCount = 1;
+let ai = true;
 
 let pipes = [];
 let livingBirds = [];
@@ -30,16 +31,18 @@ function setup() {
 	frameRate(60);
 
 	// Generate initial population
-
-	for(i = 0; i < POPULATION; i++)
+	if(ai)
+		for(i = 0; i < POPULATION; i++)
+			livingBirds.push(new Bird());
+	else
 		livingBirds.push(new Bird());
 }
 
 function draw() {
-	if(!paused) {
+	if(!paused && (!ai? livingBirds.length == 1 : true)) {
 		for(test = 0; test < gameSpeed; test++) {
 			// Game over condition
-			if(livingBirds.length == 0) {
+			if(livingBirds.length == 0 && ai) {
 				livingBirds = getNextGeneration(deadBirds);
 				nextGen();
 			}
@@ -58,8 +61,9 @@ function draw() {
 				let bird = livingBirds[i];
 
 				bird.update();
-				bird.think(impendingPipes);
 
+				if(ai)
+					bird.think(impendingPipes);
 
 				if(bird.isDead) {
 					deadBirds.push(bird);
@@ -117,12 +121,12 @@ function draw() {
 }
 
 function keyPressed() {
-	/*if(key === ' ')
-		bird.jump(JUMP_VEL);
-	else */if(key === 'p')
+	if(key === ' ' && (!ai? livingBirds.length == 1 : false))
+		livingBirds[0].jump(JUMP_VEL);
+	else if(key === 'p')
 		paused = !paused;
-	// else if(key === 'r')
-		// restart();
+	else if(key === 'r')
+		restart();
 }
 
 function nextGen() {
@@ -131,4 +135,10 @@ function nextGen() {
 	score = 0;
 	genFrameCount = 0
 	genCount++;
+}
+
+function restart() {
+	pipes = [];
+	score = 0;
+	livingBirds = [new Bird()];
 }
