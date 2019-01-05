@@ -1,13 +1,3 @@
-function mutate(x) { // copied from https://github.com/shiffman/NOC-S18/blob/master/week10/neuroevolution-flappybird/bird.js
-  if (random(1) < 0.1) {
-    let offset = randomGaussian() * 0.5;
-    let newx = x + offset;
-    return newx;
-  } else {
-    return x;
-  }
-}
-
 class Bird {
 	constructor(brain) {
 		this.x = BIRD_STARTING_X;
@@ -18,11 +8,10 @@ class Bird {
 		this.isDead = false;
 		this.fitness = 0;
 
-		if(brain instanceof NeuralNetwork) {
-			this.brain = brain.copy();
-			this.brain.mutate(mutate);
-		} else
-			this.brain = new NeuralNetwork(6, 2, 2);
+		if(brain instanceof NeuralNetwork)
+			this.brain = brain;
+		else
+			this.brain = new NeuralNetwork(6, 12, 2);
 	}
 
 	update() {
@@ -52,12 +41,12 @@ class Bird {
 
 		inputs[0] = map(this.y, 0, height, 0, 1);
 		inputs[1] = map(this.vel, 0, JUMP_VEL, 0, 1);
-		inputs[2] = map(pipes[0].x, 0, width, 0, 1);
-		inputs[3] = map(pipes[0].y, 0, height, 0, 1);
+		inputs[2] = map(pipes[0].x - this.x, -PIPE_WIDTH / 2, width - this.x, 0, 1);
+		inputs[3] = map(pipes[0].y - this.y, -height, height, 0, 1);
 
 		if(pipes.length >= 2) {
-			inputs[4] = map(pipes[1].x, 0, width, 0, 1);
-			inputs[5] = map(pipes[1].y, 0, height, 0, 1);
+			inputs[4] = map(pipes[1].x - this.x, -PIPE_WIDTH / 2, width - this.x, 0, 1);
+			inputs[5] = map(pipes[1].y - this.y, -height, height, 0, 1);
 		} else {
 			inputs[4] = map(width, 0, width, 0, 1);
 			inputs[5] = map(height / 2, 0, height, 0, 1);
@@ -74,6 +63,6 @@ class Bird {
 	}
 
 	copy() {
-		return new Bird(this.brain);
+		return new Bird(this.brain.copy());
 	}
 }
